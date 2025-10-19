@@ -10,9 +10,13 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
+const CLIENT_URL=process.env.CLIENT_URL || "http://localhost:3000";
+app.use(cors({
+    origin:CLIENT_URL,
+    credentials:true
+}));
+app.use(express.json());
 // Routes
 app.use("/auth", authRoutes);
 app.use("/courses", courseRoutes);
