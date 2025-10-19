@@ -15,26 +15,31 @@ const app = express();
 
 // ✅ Allowed frontend origins
 const allowedOrigins = [
-  "http://localhost:3000",              // Local React app
-  "https://online-lms.vercel.app",      // Deployed frontend on Vercel
-  "https://online-lms-py.vercel.app"    // Optional if backend/frontend share subdomain
+  "http://localhost:3000",
+  "https://online-lms.vercel.app",
+  "https://online-lms-py.vercel.app",
+  "https://online-lms-pi.vercel.app"
 ];
 
-// ✅ CORS Configuration
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin (like mobile apps or curl)
-      if (!origin) return callback(null, true);
+      if (!origin) return callback(null, true); // allow server-to-server, curl, etc.
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       } else {
         return callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true,
+    credentials: true
   })
 );
+
+// Handle preflight requests
+app.options("*", cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 
 app.use(express.json());
 
