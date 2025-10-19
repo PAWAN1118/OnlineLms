@@ -21,19 +21,18 @@ const allowedOrigins = [
   "https://online-lms-pi.vercel.app"
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // allow server-to-server, curl, etc.
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true
-  })
-);
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow server-to-server requests
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+}));
+
 
 // Handle preflight requests
 app.options("*", cors({
